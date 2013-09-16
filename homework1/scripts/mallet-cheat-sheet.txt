@@ -1,0 +1,50 @@
+[import]
+
+cd /Applications/mallet-2.0.7
+
+bin/mallet import-file --help
+
+bin/mallet import-file --input thuc_and_herod.txt --output thuc_and_herod.bag_of_words --remove-stopwords --print-output
+
+[try adding either of these options:
+--keep-sequence
+--preserve-case ]
+
+[classification]
+
+bin/mallet split --input thuc_and_herod.bag_of_words --training-file thuc_and_herod.train --testing-file thuc_and_herod.test --training-portion 0.9
+
+bin/mallet train-classifier --training-file thuc_and_herod.train --testing-file thuc_and_herod.test --trainer MaxEnt --output-classifier t_and_h.classifier
+
+[look at weights -- ick!]
+
+bin/mallet prune --input thuc_and_herod.bag_of_words --prune-count 10 --output thuc_and_herod_pruned.bag_of_words
+
+bin/mallet split --input thuc_and_herod_pruned.bag_of_words --training-file thuc_and_herod_pruned.train --testing-file thuc_and_herod_pruned.test --training-portion 0.9
+
+bin/mallet train-classifier --training-file thuc_and_herod_pruned.train --testing-file thuc_and_herod_pruned.test --trainer MaxEnt --output-classifier t_and_h_pruned.classifier
+
+[get information about classifier weights]
+
+bin/mallet run cc.mallet.classify.tui.Classifier2Info --classifier t_and_h_pruned.classifier
+
+[look at weights -- better]
+
+[sequence tagging]
+
+[look at file]
+
+bin/mallet run cc.mallet.examples.TrainCRF herodotus.1-7.txt herodotus.8-9.txt
+
+[look at weights]
+
+[edit]
+
+ant
+
+
+[topic modeling]
+
+bin/mallet import-file --input thuc_and_herod.txt --stoplist-file stoplists/en.txt --output thuc_and_herod.sequences --keep-sequence --preserve-case
+
+bin/mallet train-topics --input thuc_and_herod.sequences --num-topics 40 --optimize-interval 20 --optimize-burn-in 20 --output-topic-keys thuc_and_herod.topics
