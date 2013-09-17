@@ -4,6 +4,7 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
 
 from q3.items import HyperlinkItem
+from scrapy.http import Request
 
 class CCSSpider(CrawlSpider):
     name = "ccs.neu.edu"
@@ -24,19 +25,18 @@ class CCSSpider(CrawlSpider):
     def parse_links(self, response):
         hxs = HtmlXPathSelector(response)
         hyperlinks = hxs.select('//a')
-        items = []
-        for link in links:
+        for link in hyperlinks:
             title = ''.join(link.select('./@title').extract())
             url = ''.join(link.select('./@href').extract())
             meta={'title':title,}
+            
             cleaned_url = "%s/?1" % url if not '/' in url.partition('//')[2] else "%s?1" % url
             yield Request(cleaned_url, callback = self.parse_page, meta=meta,)
 
-        return items
 
     def parse_page(self, response):
         hxs = HtmlXPathSelector(response)
-        item=SPage()
+        item = HyperlinkItem()
         item['url'] = response.url
         item['title']=response.meta['title']
         item['h1']=hxs.select('//h1/text()').extract()
