@@ -45,12 +45,12 @@ class CCSSpider(BaseSpider):
     count = 0
     seen_urls = {}
     
-    def is_valid_link(self,url):
+    def get_valid_link(self,url):
         p = urlparse.urlparse(url)
-        if p.scheme != 'http': return False
-        if p.netloc != 'www.ccs.neu.edu': return False
+        if p.scheme != 'http': return None
+        if p.netloc != 'www.ccs.neu.edu': return None
 #         if p.netloc != 'www.northeastern.edu': return False
-        if url in self.seen_urls: return False
+        if url in self.seen_urls: return None
         self.seen_urls[url] = True
         return True
     
@@ -68,9 +68,10 @@ class CCSSpider(BaseSpider):
             hxs = HtmlXPathSelector(response)
 
             for url in hxs.select('//a/@href').extract():
-                if not self.is_valid_link(url): continue
+                valid_url = self.get_valid_link(url)
+                if valid_url is None: continue
                 
-                yield Request(url, callback=self.parse)
+                yield Request(valid_url, callback=self.parse)
             
 #     def parse(self,response):
 #         self.extractor.seen_urls[response.url]=True
