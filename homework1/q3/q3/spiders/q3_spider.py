@@ -6,6 +6,9 @@ import re
 import urlparse
 import sys
 from scrapy.exceptions import CloseSpider
+from scrapy.spider import BaseSpider
+from scrapy.selector import HtmlXPathSelector
+from scrapy.http import Request
 # from scrapy.contrib.closespider import CloseSpider
 
 class MyExtractor(SgmlLinkExtractor):
@@ -36,38 +39,58 @@ class MyExtractor(SgmlLinkExtractor):
         filtered_links =  filter(self.is_valid_link, links)
         return filtered_links
 
-class CCSSpider(CrawlSpider):
+class CCSSpider(BaseSpider):
     name = "ccs.neu.edu"
-    start_urls = [
-        "http://www.ccs.neu.edu/",
-#         "file:///tmp/tt",
-    ]
-    extractor = MyExtractor(seen_urls=[], tags=('a','area','link'), unique=False, deny_extensions=[])
-
+    start_urls = [ "http://www.ccs.neu.edu/", ]
     count = 0
-    rules = (
-        Rule(extractor, callback="parse_page", follow=True),
-    )
+    seen_urls = {}
+    
+    def is_valid_link(self,url):
+        p = urlparse.urlparse(url)
+        if p.scheme != 'http': return False
+        if p.netloc != 'www.ccs.neu.edu': return False
+#         if p.netloc != 'www.northeastern.edu': return False
+        if url in self.seen_urls: return False
+        self.seen_urls[url] = True
+        return True
+    
+    def parse(self, response):
         
-    def parse(self,response):
-        self.extractor.seen_urls[response.url]=True
-        for i in self.parse_page(response):
-            yield i
-        for r in  CrawlSpider.parse(self,response):
-            yield r
-    
-    
-    def parse_page(self,response):
         content_types = re.split('\s*;\s*',response.headers['Content-Type'])
-        url = response.url
-        
         if 'application/pdf' in content_types or 'text/html' in content_types: 
-            yield HyperlinkItem(url=url)
-            
-            
+            yield HyperlinkItem(url=response.url)
             self.count += 1
-            if self.count>100:
+            if self.count>10:
                 raise CloseSpider("Closing spider")
+
+        
+        if 'text/html' in content_types:
+            hxs = HtmlXPathSelector(response)
+
+            for url in hxs.select('//a/@href').extract():
+                if not self.is_valid_link(url): continue
+                
+                yield Request(url, callback=self.parse)
+            
+#     def parse(self,response):
+#         self.extractor.seen_urls[response.url]=True
+#         for i in self.parse_page(response):
+#             yield i
+#         for r in  CrawlSpider.parse(self,response):
+#             yield r
+    
+    
+#     def parse_page(self,response):
+#         content_types = re.split('\s*;\s*',response.headers['Content-Type'])
+#         url = response.url
+#         
+#         if 'application/pdf' in content_types or 'text/html' in content_types: 
+#             yield HyperlinkItem(url=url)
+#             
+#             
+#             self.count += 1
+#             if self.count>100:
+#                 raise CloseSpider("Closing spider")
 
 
 
