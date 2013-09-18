@@ -11,5 +11,6 @@ BOT_NAME = 'q3'
 SPIDER_MODULES = ['q3.spiders']
 NEWSPIDER_MODULE = 'q3.spiders'
 
+DOWNLOAD_DELAY = 0.3
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'q3 (+http://www.yourdomain.com)'

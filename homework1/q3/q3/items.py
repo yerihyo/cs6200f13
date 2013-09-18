@@ -6,8 +6,8 @@
 from scrapy.item import Item, Field
 
 class HyperlinkItem(Item):
-    name = Field()
-    link = Field()
+#     name = Field()
+    url = Field()
     # define the fields for your item here like:
     # name = Field()
     #pass

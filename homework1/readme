@@ -1,0 +1,16 @@
+# How to run the code
+
+# Problem 2
+
+## How to run
+q2/q2.bash
+
+## html list
+q2/crawled/result.list
+
+
+
+# Problem 3
+sudo pip install Scrapy
+cd q3
+scrapy crawl www.ccs.neu.edu
