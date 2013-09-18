@@ -4,6 +4,9 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from q3.items import HyperlinkItem
 import re
 import urlparse
+import sys
+from scrapy.exceptions import CloseSpider
+# from scrapy.contrib.closespider import CloseSpider
 
 class MyExtractor(SgmlLinkExtractor):
     seen_urls = {}
@@ -15,7 +18,6 @@ class MyExtractor(SgmlLinkExtractor):
                  tags=tags, attrs=attrs, canonicalize=canonicalize, unique=unique, process_value=process_value,
                  deny_extensions=deny_extensions)
         
-        print "CREATED!!~!!!!!!"
         for l in seen_urls: self.seen_urls[l]=True
     
     def is_valid_link(self,l):
@@ -23,6 +25,7 @@ class MyExtractor(SgmlLinkExtractor):
         p = urlparse.urlparse(url)
         if p.scheme != 'http': return False
         if p.netloc != 'www.ccs.neu.edu': return False
+#         if p.netloc != 'www.northeastern.edu': return False
         if url in self.seen_urls: return False
         self.seen_urls[url] = True
         return True
@@ -33,81 +36,38 @@ class MyExtractor(SgmlLinkExtractor):
         filtered_links =  filter(self.is_valid_link, links)
         return filtered_links
 
-# class TestSpider4(CrawlSpider):
-#     name = "ccs.neu.edu"
-#     start_urls = ["http://www.ccs.neu.edu/"]
-# 
-#     extractor = SgmlLinkExtractor()
-# 
-#     rules = (
-#         Rule(extractor,callback='parse_page',follow=True),
-#         )
-# 
-#     def parse_start_url(self, response):
-#         list(self.parse_links(response))
-# 
-#     def parse_links(self, response):
-#         hxs = HtmlXPathSelector(response)
-#         links = hxs.select('//a')
-#         
-#         parsed_response_url = urlparse.urlparse(response.url)
-#         response_url_dirname = ''.join([parsed_response_url.scheme, '://', parsed_response_url.netloc, dirname(parsed_response_url.path),'/'])
-#          
-#         for link in links:
-#             title = ''.join(link.select('./@title').extract())
-#             url = ''.join(link.select('./@href').extract())
-#             meta={'title':title,}
-#             
-#             parsed_url = urlparse.urlparse(url)
-#             if parsed_url.scheme: cleaned_url = url
-#             else: cleaned_url = "%s%s" % (response_url_dirname,url)
-#             
-# #             cleaned_url = "%s/?1" % url if not '/' in url.partition('//')[2] else "%s?1" % url
-#             yield Request(cleaned_url, callback = self.parse_page, meta=meta,)
-# 
-#     def parse_page(self, response):
-#         return HyperlinkItem(url=response.url)
-
-
 class CCSSpider(CrawlSpider):
     name = "ccs.neu.edu"
     start_urls = [
         "http://www.ccs.neu.edu/",
+#         "file:///tmp/tt",
     ]
-    extractor = MyExtractor(seen_urls=[], unique=False)
+    extractor = MyExtractor(seen_urls=[], unique=False, deny_extensions=[])
 
+    count = 0
     rules = (
-        Rule(extractor, callback="parse_page",follow=True),
+        Rule(extractor, callback="parse_page", follow=True),
     )
-#     def __init__(self):
-#         CrawlSpider.__init__(self)
-#         print "CREATED!!!!!!!!!!!!!!!!!"
+        
+    def parse(self,response):
+        self.extractor.seen_urls[response.url]=True
+        for i in self.parse_page(response):
+            yield i
+        for r in  CrawlSpider.parse(self,response):
+            yield r
+    
     
     def parse_page(self,response):
         content_types = re.split('\s*;\s*',response.headers['Content-Type'])
         url = response.url
+        
         if 'application/pdf' in content_types or 'text/html' in content_types: 
             yield HyperlinkItem(url=url)
-        else:
-            print "### Other type: [%s]" %  response.headers['Content-Type']
-    
-#     def parse_start_url(self, response):
-#         list(self.parse_links(response))
-#         
-#     def parse_links(self,response):
-#         parsed_response_url = urlparse.urlparse(response.url)
-#         response_url_dirname = ''.join([parsed_response_url.scheme, '://', parsed_response_url.netloc, dirname(parsed_response_url.path),'/'])
-#             
-#         hxs = HtmlXPathSelector(response)
-#         urls = hxs.select('//a/@href').extract()
-#         for url in urls:
-# 
-#             parsed_url = urlparse.urlparse(url)
-#             if parsed_url.scheme: cleaned_url = url
-#             else: cleaned_url = "%s%s" % (response_url_dirname,url)
-#             
-#             yield Request(cleaned_url, callback = self.parse_page) #, meta=meta,)
-
+            
+            
+            self.count += 1
+            if self.count>100:
+                raise CloseSpider("Closing spider")
 
 
 
