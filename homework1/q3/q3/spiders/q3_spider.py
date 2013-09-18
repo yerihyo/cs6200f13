@@ -42,7 +42,7 @@ class CCSSpider(CrawlSpider):
         "http://www.ccs.neu.edu/",
 #         "file:///tmp/tt",
     ]
-    extractor = MyExtractor(seen_urls=[], unique=False, deny_extensions=[])
+    extractor = MyExtractor(seen_urls=[], tags=('a','area','link'), unique=False, deny_extensions=[])
 
     count = 0
     rules = (
