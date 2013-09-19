@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+set -u
+
+MALLET_VERSION=mallet-2.0.7

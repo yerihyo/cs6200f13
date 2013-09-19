@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<examples>
+	<example number="1">
+		<title>Fresh on Bloor</title>
+		<description>Our vegan menu boasts an array of exotic starters, multi-layered salads, filling wraps, high  protein burgers and our signature Fresh bowls.</description>
+		<url>http://www.freshrestaurants.ca</url>
+	</example>
+	<example number="2">
+		<title>Milagro Restaurant</title>
+		<description>Toronto's first high end Mexican cantina is located in the heart of the entertainment district.  Milagro is an original concept created by Andrés and Arturo Anhalt, brothers born and raised in Mexico City, inspired by the traditional Mexican cantinas of the golden era where food is outstanding, beverages are well served, service is warm and the atmosphere is relaxed.</description>
+		<url>http://www.milagrorestaurant.com</url>
+	</example>
+	<example number="3">
+		<title>HoSu Bistro</title>
+		<description>This busy place features a wide selection of Japanese culinary delights. It is usually packed with Yuppies, College students, and friendly locals.</description>
+		<url>http://www.hosu.ca</url>
+	</example>
+	<example number="4">
+		<title>Spectacular Niagara Falls Sightseeing Tours</title>
+		<description>Take unique Niagara Falls tours with Niagara Helicopters, and go sightseeing from above on your Niagra Falls, Ontario vacation</description>
+		<url>http://www.niagarahelicopters.com</url>
+	</example>
+	<example number="5">
+		<title>CN Tower </title>
+		<description>Visitors are in awe of its height, and locals are pleased to have such clear TV reception. The tower is twice as tall as its closest competitor in the city, and it's astounding to watch the surrounding 40- and 50-storey buildings fall away below you from the glass elevator. The basic ticket takes you up to the 346-metre (1,136-foot) Look Out Level, where there are indoor and outdoor observation decks, plus a nerve-jangling section of glass floor.</description>
+		<url>http://www.cntower.ca</url>
+	</example>
+	<example number="6">
+		<title>Hockey Hall of Fame</title>
+		<description>A tribute to Canada's national game, this sports shrine features more than 5,110 sq m (50,000 sq ft) of games, displays and memorabilia, including Olympic artefacts and information on the hall's 300-odd inductees. Most people come to get their photo taken with the Stanley Cup and other hockey trophies, but you can also test your skills against a couple of virtual greats.</description>
+		<url>http://www.hhof.com</url>
+	</example>
+	<example number="7">
+		<title>Art Gallery of Ontario </title>
+		<description>The Art Gallery of Ontario is an art museum in Toronto's Downtown Grange Park district. Its collection includes more than 80,000 works spanning the 1st century to the present-day. The gallery has 45,000 square metres (480,000 sq ft) of physical space, making it one of the largest galleries in North America.</description>
+		<url>http://www.ago.net</url>
+	</example>
+	<example number="8">
+		<title>Toronto Eaton Centre</title>
+		<description>Toronto Eaton Centre is Canada's premier shopping destination offering top retailers unrivalled by any other shopping centre in downtown Toronto.</description>
+		<url>http://www.torontoeatoncentre.com</url>
+	</example>
+	<example number="9">
+		<title>Lai Wah Heen</title>
+		<description>Although the dining room is somewhat institutional -  it is, after all located in the business friendly Metropolitan Hotel - the Cantonese cooking is so good that the setting matters little. Sunday brunch's tasting menu comprises six dim-sum selections and one noodle dish. Portions and presentation are the epitome of delicate: alligator-loin dumplings, banana-and-shrimp mousse and mini abalones to start. The belle of the dinner menu is crispy Peking duck.</description>
+		<url>http://www.metropolitan.com/lwh</url>
+	</example>
+	<example number="10">
+		<title>Ouzeri</title>
+		<description>Budget eaters tend to opt for pseudo-Greek platters of souvlaki, fries and salad at generic eateries throughout Greektown. But if you spend a bit more, you can enjoy the real deal, in a smarter setting: the clean scheme of white with coloured tiles makes a change from the area's usual checked tablecloths. Magnificent dips and oven-warmed pitta are the prelude to a seafood list of Aegean proportions, so pace yourself. Ouzeri is also a popular watering hole, where younger crowds wash down snacks with bottles of Greek wine. Friendly and buzzy.</description>
+		<url>http://www.ouzeri.com</url>
+	</example>
+	<example number="11">
+		<title>Young Centre for the Performing Arts</title>
+		<description>The latest venue to open for theatre is a show-stopper in itself: 19th-century tank houses in the Distillery District were converted into three stages, a spacious foyer, a bookstore, and a café and cosy nook with a fireplace. Local architect firm KPMB kept the exposed beams and rough brick walls for aesthetics, though the acoustics suffer as a result in some seats. Soulpepper Theatre stages performances year-round.</description>
+		<url>http://www.youngcentre.ca</url>
+	</example>
+	<example number="12">
+		<title>Bad Dog Theatre Company</title>
+		<description>The Bad Dog Theatre is an improv comedy club in Toronto with shows most nights of the week, improvisation workshops, and acting classes.</description>
+		<url>http://www.baddogtheatre.com</url>
+	</example>
+	<example number="13">
+		<title>Steam Whistle Brewery</title>
+		<description>Brewed at The Roundhouse, home of the steam locomotives that helped pioneer our nation, Steam Whistle brings you this authentically crafted pilsner. Honouring an era of quality craftsmanship, we use just four natural ingredients: pure spring water, malted barley, hops and yeast.</description>
+		<url>http://www.steamwhistle.ca</url>
+	</example>
+	<example number="14">
+		<title>Hammam Spa</title>
+		<description>Lying on a warm marble slab is what hammams are all about in the old country, and this New World version mixes such Turkish delights as vigourous body scrubs with New Age hot stone and craniosacral treatments. If you want to get squeaky clean, start by loosening up in the large co-ed steam room before being pummelled into a state of blissful relaxation.</description>
+		<url>http://www.hammamspa.ca</url>
+	</example>
+	<example number="15">
+		<title>Allen's</title>
+		<description>Toronto has no shortage of Irish pubs; this one's classy, polished-oak Manhattan feel is a nod to New York's famous bar of the same name. Regulars crowd the brass-rail bar, banquettes and, further back, the dining room. The open and cool back patio seats dozens more. The menu is sophisticated, including Kerry lamb and bistro specialities such as Atlantic salmon; the burgers are among the best in town. Draught beers flow; choose from more than a dozen excellent labels, plus dozens more in bottles.</description>
+		<url>http://www.allens.to</url>
+	</example>
+	<example number="16">
+		<title>Four Seasons Centre for the Performing Arts</title>
+		<description>An opera house can assume a larger-than-life presence and become a symbol of a city. Think of Milan's La Scala, the swooping sail architecture of Sydney or the stunning 21st-century opera houses in Copenhagen and Oslo. These theatres become a point of pride for citizens, even if they never went to the opera, because they placed the city on the cultural map.</description>
+		<url>http://www.fourseasonscentre.ca</url>
+	</example>
+	<example number="17">
+		<title>Massey Hall</title>
+		<description>The first concert at this historic auditorium took place in 1894 and featured Handel's Messiah, performed by a 500-member choir and 70-piece orchestra. Today the 2,765-seat hall is still one of the most rewarding places in the city to hear classical music. Sight lines vary, and the upper seats are hard and cramped, but the acoustics and intimacy compensate. Before Roy Thomson Hall was opened, this was home to the Toronto Symphony Orchestra. Classical concerts are not as common now at Massey Hall, but you can still see great folk, blues, country and jazz. There is no better place to catch such acts as Wynton Marsalis, Alison Krauss and BB King.</description>
+		<url>http://www.masseyhall.com</url>
+	</example>
+	<example number="18">
+		<title>Canada's Wonderland</title>
+		<description>Spend your summer at Canada's premier amusement park! There will be thrills, splashes and so much more at Canada's Wonderland. Come check us out!</description>
+		<url>http://www.canadaswonderland.com/</url>
+	</example>
+	<example number="19">
+		<title>SOMA</title>
+		<description>A café, chocolate shop and epicurean temple rolled into one, this unique spot is the brainchild of a pastry chef and his designer wife. David Castellan and Cynthia Leung decided the meaning of life was found in chocolate, so in their new expanded shop they have laid bare the dark arts. Through Plexiglas windows you can watch staff grinding cocoa beans, crafting choccies and making ice-cream (find your inner Charlie here). The open room has a few stools and a piazza-inspired set of stairs - perfect for lounging while you sip top-grade coffee or spicy hot chocolate, and nibble on delicious cakes.</description>
+		<url>http://www.somachocolate.com</url>
+	</example>
+	<example number="20">
+		<title>Downsview Park</title>
+		<description>Downsview Park is active year round with events, sports, businesses, filming, urban agriculture, camps and school and stewardship programs. Downsview Park is building a park while being a park. Many park construction projects are underway to offer visitors more. Surf our site and discover everything we have to offer at Downsview Park.</description>
+		<url>http://www.downsviewpark.ca</url>
+	</example>
+	<example number="21">
+		<title>Queen's Quay Terminal</title>
+		<description>From our fabulous restaurants overlooking the Lake to our unique collection of shops, boutiques and conveniences - welcome to Queen’s Quay Terminal.</description>
+		<url>http://www.qqterminal.com</url>
+	</example>
+	<example number="22">
+		<title>Black Creek Pioneer Village</title>
+		<description>Experience life in the 1860’s. Explore authentically restored heritage homes, shops &amp;amp; gardens. History comes alive as interpreters in period dress demonstrate how settlers lived &amp; worked in rural Ontario.</description>
+		<url>http://www.blackcreek.ca/</url>
+	</example>
+	<example number="23">
+		<title>Tea Va See</title>
+		<description>Tea Va See tea house is a little coffee and smoke shop that looks like someone's cozy living room! The host is awesome, he makes you feel like you're at home. Tea Va See has a great selection of teas and shisha for you to enjoy.</description>
+		<url>http://www.teavasee.com</url>
+	</example>
+	<example number="24">
+		<title>Philthy McNasty's</title>
+		<description>This bar/lounge has live music/DJ on Friday and Saturday night, and there are pool tournaments and dancing going on at the lower level. On regular nights this place is great for drinks and standard bar food.</description>
+		<url>http://www.philthymcnastys.com</url>
+	</example>
+	<example number="25">
+		<title>Smokey Joe's</title>
+		<description>Smokey Joe's is a casual, uptown meeting place for mostly the 20's and 30's. Features a full-service bar, rooftop patio, dance floor/DJ (every weekend), and dining booths. Karaoke on Sunday nights.</description>
+		<url>http://www.smokeyjoescafe.ca</url>
+	</example>
+	<example number="26">
+		<title>Extaz Hookah Bar &amp; Lounge</title>
+		<description>Extaz Lounge is a local Boys-and Girls Night-Out in Thornhill.  Neighbourhood DJs use this place as a practice pad, which makes for a pretty interesting guest experience overall.Karaoke nights Sundays and Wednesdays. Live Jazz on Thursdays.</description>
+		<url>http://www.extazlounge.com</url>
+	</example>
+	<example number="27">
+		<title>Berlin Nightclub</title>
+		<description>If you are looking to loose yourself among mature, well-established crowd, this is the place! Berlin provides the perfect atmosphere for singles, special occasions and people who love to dance! The club also features a spectacular rooftop patio.</description>
+		<url>http://www.berlinnightclub.com</url>
+	</example>
+	<example number="28">
+		<title>Royal Ontario Museum - ROM</title>
+		<description>The Royal Ontario Museum is among the world's leading museums of natural  history, and of world cultures. Indeed, in combining a universal museum  of cultures with that of natural history, the ROM offers an unusual  breadth of experience. Millions of objects on display in World Culture, Natural History, and other exhibits.</description>
+		<url>http://www.rom.on.ca</url>
+	</example>
+	<example number="29">
+		<title>Taras Shevchenko Museum</title>
+		<description>The Taras H. Shevchenko Museum founded by the Association of United Ukrainian Canadians, for the purpose of popularizing the life and work of the Bard of Ukraine, and the contribution of Canadians of Ukrainian descent to the social, economic and political life of Canada.</description>
+		<url>http://www.infoukes.com/shevchenkomuseum</url>
+	</example>
+	<example number="30">
+		<title>The Rex</title>
+		<description>There's a reason that this place has been kicking around for as long as  it has.  It began in the late 80s as jazz and blues bar and has become a  quintessential venue for the Toronto jazz scene, be the Toronto Jazz  Festival on or not.</description>
+		<url>http://www.therex.ca</url>
+	</example>
+	<example number="31">
+		<title>Yuk Yuk's</title>
+		<description>Mark Breslin's Yuk Yuk's - The World's Largest Chain of Comedy Clubs.</description>
+		<url>http://www.yukyuks.com</url>
+	</example>
+	<example number="32">
+		<title>Underground Garage</title>
+		<description>This subterranean den might as well be a college dorm room: Polaroids of drunken patrons plaster the bar's backsplash, empty two-fours and kegs are proudly stacked along the walls, and the sounds of Black Sabbath, Led Zeppelin and Soundgarden reverberate off the walls. Don't bother ordering anything but beer and simple mixed drinks; fancy cocktails are not the point.</description>
+		<url>http://www.undergroundgarage.ca</url>
+	</example>
+	<example number="33">
+		<title>Medieval Times</title>
+		<description>Step back in time with epic battles, jousting tournaments, royal feasts, knights and romance at any of our nine North American castles.</description>
+		<url>http://www.medievaltimes.com/toronto.aspx</url>
+	</example>
+	<example number="34">
+		<title>Bowlerama - Newtonbrook</title>
+		<description>Bowlerama  is a well equipped and spacious bowling alley. Mini-bowling and  traditional bowling alleys are available. At night, the space is lit  with black lights, and has lively music playing for you to enjoy. The space and furniture is slightly out of date, but creates a retro atmosphere.</description>
+		<url>http://www.bowlerama.com</url>
+	</example>
+	<example number="35">
+		<title>St. Lawrence Market</title>
+		<description>Over 120 specialty merchants and vendors await you at the corner of Front and Jarvis. In the Centre of the historic Old Town Toronto, close to the hub of today's downtown, sit three buildings that have served as Toronto's social centre, City Hall, and marketplace throughout the city's history.</description>
+		<url>http://www.stlawrencemarket.com</url>
+	</example>
+	<example number="36">
+		<title>Mississauga Flea Market</title>
+		<description>Mississauga flea market is the largest indoor flea market over 350 vendors, outdoor farmers market, Free parking.</description>
+		<url>http://www.mississauga-fleamarket.com</url>
+	</example>
+	<example number="37">
+		<title>Toronto Botanical Garden / Edwards Gardens</title>
+		<description>The Toronto Botanical Garden offers an array of 12 award-winning themed gardens spanning nearly four acres, designed to educate and inspire.</description>
+		<url>http://www.torontobotanicalgarden.ca</url>
+	</example>
+	<example number="38">
+		<title>Port Credit Boardwalk and Village</title>
+		<description>A great community by the Lake to get away to, from the busy city streets. Here you will find boardwalk trails, fine and casual dining, boats and yachts, historical landmarks and heritage sites, and a very calm and friendly atmosphere.</description>
+		<url>http://www.portcredit.com</url>
+	</example>
+	<example number="39">
+		<title>Toronto Mandir Temple &amp; Museum of Indo-Canadian Heritage</title>
+		<description>A unique Architectural marvel made with 24,000 pieces of marble and stone - one of a kind in Canada.</description>
+		<url>http://toronto.baps.org</url>
+	</example>
+	<example number="40">
+		<title>The Distillery Historic District</title>
+		<description>The Distillery District is a world-renowned Toronto landmark that offers a glimpse into the city's industrial past. This is a year-round venue for artistic and cultural expos, festivals, and events; and houses numerous restaurants, coffee shops, and outdoor bars and drinking lounges.The Distillery District is a pedestrian-only area, so no cars inside; just cobblestones, and people-watching!</description>
+		<url>http://www.thedistillerydistrict.com</url>
+	</example>
+	<example number="41">
+		<title>Hyde Mill Ruins</title>
+		<description>Located at the foot of Ontario Street on the banks of the Credit River, the Hyde Mill Ruins were significant to the establishment of both John Hyde's Ontario Mills and the first municipally-owned hydro-electric power plant. Hyde Mill Ruins are located at 0 Ontario Street East, at the foot of Ontario Street East, in Streetsville, in Mississauga. The ruins are of a one-storey stone and brick building that was constructed in circa 1840.</description>
+		<url>http://www.historicplaces.ca/en/rep-reg/place-lieu.aspx?id=13848</url>
+	</example>
+	<example number="42">
+		<title>Muddy York Walking Tours</title>
+		<description>Muddy York Walking Tours is a company dedicated to bringing Toronto's past back to life in fun and exciting ways. We believe that exploring Toronto's history is a great way to spend a few hours.  We offer several tours which present the past as an authentic playground. Come explore a city that you only thought you knew!</description>
+		<url>http://www.muddyyorktours.com</url>
+	</example>
+	<example number="43">
+		<title>Toronto Helicopter Tours</title>
+		<description>Amazing helicopter tours offering scenic flights over downtown Toronto. We offer several different aerial tours and tour packages as well as seasonal specials such as Christmas.</description>
+		<url>http://www.thehelicoptercompany.com</url>
+	</example>
+	<example number="44">
+		<title>World's Biggest Book Store</title>
+		<description>Didnt visit the World's Biggest Bookstore yet? Come down to Yonge and Dundas and see it for yourself! Its open to the public since 1980, it grew and has now over 20kms of bookshelves!</description>
+		<url>http://www.chapters.indigo.ca/home/storeLocator/storeDetails/200/</url>
+	</example>
+	<example number="45">
+		<title>EfstonScience</title>
+		<description>Makers, Hackers, Tinkerers and Inventors, rejoice! The latest &amp; greatest from tip brands like Jensen, Circuit Test, Belleman and more. Calling all Jr. Einsteins, Astronuts and Rocket Surgeons! Efston Science is Smart Science Fun for kids of all ages. Welcome to the Astronomy SuperStore - Canada's largest hands-on display of telescopes &amp; optics! A science-lovers paradise - thousands of innovative, hard-to-find and downright cool scientific products.</description>
+		<url>http://www.escience.ca</url>
+	</example>
+	<example number="46">
+		<title>Toronto Zoo</title>
+		<description>The Toronto Zoo is Canada's premier zoo, known for its interactive education and conservation activities. As a unique wildlife experience, we inspire people to live in ways that promote the well-being of the natural world.</description>
+		<url>http://www.torontozoo.com/</url>
+	</example>
+	<example number="47">
+		<title>Putting Edge Glow-in-the-Dark Mini Golf</title>
+		<description>Looking for excitement? Craving entertainment? Take a break from reality and enter a new dimension of fun in the Ultimate Indoor Glow-in-the-Dark Mini Golf Experience at Putting Edge. Perfect for a night out with family and friends, parties and more! Book your tee-time today.</description>
+		<url>http://www.puttingedge.com</url>
+	</example>
+	<example number="48">
+		<title>Air Combat Zone Inc.</title>
+		<description>Air Combat Zone puts YOU behind the controls of a high performance F/A-18 flight simulator. If you've ever wondered what it might be like to be a real F/A-18 pilot, now's your chance to find out. The Air Combat Zone experience redefines entertainment to bring you the thrill of a lifetime. It's JUST like the real thing.</description>
+		<url>http://www.aircombatzone.com/</url>
+	</example>
+	<example number="49">
+		<title>Playdium Mississauga</title>
+		<description>Playdium is the ultimate interactive, virtual and physical Family Entertainment Center. The 40,000 sq. ft. indoor complex features more than 200 of today’s newest attractions, rides &amp; simulators. Our outdoors feature Go-Karts, Mini-Golf, Water Wars &amp; Bungee Trampolines.  Playdium Is The Ultimate Place To Play!</description>
+		<url>http://www.playdium.com</url>
+	</example>
+</examples>

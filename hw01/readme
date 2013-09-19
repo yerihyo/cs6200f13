@@ -1,0 +1,22 @@
+# How to run the code
+
+# Problem 2
+
+## How to run
+q2/q2.bash
+
+## result list
+q2/crawled/result.list
+
+
+
+# Problem 3
+
+## How to install
+q3/install.bash
+
+## How to run
+q3/run.bash
+
+## result list
+q3/result/final.csv
