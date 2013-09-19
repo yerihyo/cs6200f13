@@ -7,7 +7,8 @@ my %h = ();
 my $wc = 0;
 while(my $l=<STDIN>){
     chomp($l);
+    #print STDERR "$l\n";
     $wc++;
     $h{$l}++;
-    print join(",",length(keys($h)), $wc)."\n";
+    print join(",",log(scalar(keys(%h))), log($wc) )."\n";
 }
