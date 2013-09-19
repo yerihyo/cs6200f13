@@ -3,9 +3,11 @@
 set -e
 set -u
 
-rm -f result/raw.csv resultfinal.csv
-echo "You need to install scrapy in order to run this program"
-sudo pip install scrapy
-scrapy crawl ccs.neu.edu -o result/raw.csv -t csv
+FILE_DIR=$(dirname `readlink -f ${0}`)
+BASE_DIR=$FILE_DIR
 
-tail -n +2 result/raw.csv | head -n100  > result/final.csv
+cd $BASE_DIR
+rm -f $BASE_DIR/result/raw.csv $BASE_DIR/result/final.csv
+scrapy crawl ccs.neu.edu -o $BASE_DIR/result/raw.csv -t csv
+
+tail -n +2 $BASE_DIR/result/raw.csv | head -n100  > $BASE_DIR/result/final.csv

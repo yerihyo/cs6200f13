@@ -15,6 +15,6 @@ DEPTH_PRIORITY = 1
 SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
 SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
  
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 5
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'q3 (+http://www.yourdomain.com)'
