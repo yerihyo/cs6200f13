@@ -11,6 +11,10 @@ BOT_NAME = 'q3'
 SPIDER_MODULES = ['q3.spiders']
 NEWSPIDER_MODULE = 'q3.spiders'
 
-DOWNLOAD_DELAY = 0.3
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = 'scrapy.squeue.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeue.FifoMemoryQueue'
+ 
+DOWNLOAD_DELAY = 1
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'q3 (+http://www.yourdomain.com)'

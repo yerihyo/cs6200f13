@@ -4,7 +4,6 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from q3.items import HyperlinkItem
 import re
 import urlparse
-import sys
 from scrapy.exceptions import CloseSpider
 # from scrapy.contrib.closespider import CloseSpider
 
@@ -25,7 +24,6 @@ class MyExtractor(SgmlLinkExtractor):
         p = urlparse.urlparse(url)
         if p.scheme != 'http': return False
         if p.netloc != 'www.ccs.neu.edu': return False
-#         if p.netloc != 'www.northeastern.edu': return False
         if url in self.seen_urls: return False
         self.seen_urls[url] = True
         return True
@@ -40,7 +38,6 @@ class CCSSpider(CrawlSpider):
     name = "ccs.neu.edu"
     start_urls = [
         "http://www.ccs.neu.edu/",
-#         "file:///tmp/tt",
     ]
     extractor = MyExtractor(seen_urls=[], tags=('a','area','link'), unique=False, deny_extensions=[])
 
@@ -63,7 +60,6 @@ class CCSSpider(CrawlSpider):
         
         if 'application/pdf' in content_types or 'text/html' in content_types: 
             yield HyperlinkItem(url=url)
-            
             
             self.count += 1
             if self.count>100:
