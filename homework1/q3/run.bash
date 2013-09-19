@@ -3,6 +3,7 @@
 set -e
 set -u
 
+rm -f result/raw.csv resultfinal.csv
 echo "You need to install scrapy in order to run this program"
 sudo pip install scrapy
 scrapy crawl ccs.neu.edu -o result/raw.csv -t csv
