@@ -10,4 +10,4 @@ DATA_DIR=$BASE_DIR/data
 
 $SCRIPTS_DIR/parse.pl $DATA_DIR/pg11.clean.txt > $DATA_DIR/pg11.nopunc.txt 
 
-cat $DATA_DIR/pg11.nopunc.txt | $SCRIPTS_DIR/wc.pl
+(cat $DATA_DIR/pg11.nopunc.txt | $SCRIPTS_DIR/wc.pl > $FILE_DIR/wc.list) >& $FILE_DIR/log
