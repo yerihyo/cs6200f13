@@ -127,14 +127,14 @@ def main():
     if args.print_result:
         with open(args.print_result, 'w') as result_ofile:
             for p,v in pr_sorted:
-                print >>result_ofile, p, "%.8f" % v
+                print >>result_ofile, p, v
 
     # print lemur link of each page for easy searching
     if args.print_urls:
         with open(args.print_urls, 'w') as url_ofile:
             for p,v in pr_sorted:
                 url = "http://fiji4.ccs.neu.edu/~zerg/lemurcgi_IRclass/lemur.cgi?d=0&e=%s" % p
-                print >>url_ofile, "<a href='%s'>%s</a> %.4f<br/>" % (url,p,v)
+                print >>url_ofile, "<a href='%s'>%s</a> %.8f<br/>" % (url,p,v)
 
 
 
