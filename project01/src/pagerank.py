@@ -113,7 +113,7 @@ def main():
         if abs(stats[0][1]-1)>0.1: raise "Values fluctuating!"
 
         # Halting conditions
-        if args.halt_iteration is not None and i>=halt_iteration: break
+        if args.halt_iteration is not None and i>=args.halt_iteration: break
         if prev_perp and args.halt_perplexity is not None \
                 and abs(perp-prev_perp)<args.halt_perplexity: break
         prev_perp = perp
