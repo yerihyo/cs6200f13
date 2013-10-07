@@ -10,5 +10,5 @@ while(my $l=<STDIN>){
     #print STDERR "$l\n";
     $wc++;
     $h{$l}++;
-    print join(",",log(scalar(keys(%h))), log($wc) )."\n";
+    print join("\t",log(scalar(keys(%h))), log($wc) )."\n";
 }
