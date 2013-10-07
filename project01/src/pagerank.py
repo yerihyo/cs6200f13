@@ -127,7 +127,7 @@ def main():
     if args.print_result:
         with open(args.print_result, 'w') as result_ofile:
             for p,v in pr_sorted:
-                print >>result_ofile, p, v
+                print >>result_ofile, p, "%.8f" % v
 
     # print lemur link of each page for easy searching
     if args.print_urls:
