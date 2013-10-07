@@ -3,8 +3,8 @@
 import sys,math
 import argparse
 
+# calculate out-degree of each node
 def get_degree(filename):
-    #in_degree = {}
     out_degree = {}
     with open(filename) as f:
         for l in f:
@@ -13,25 +13,23 @@ def get_degree(filename):
             for i,p in enumerate(words):
                 if p not in out_degree:
                     out_degree[p] = 0
-                #if p not in in_degree:
-                #    in_degree[p] = 0
 
                 if i!=0: out_degree[p] += 1
-                #else: in_degree[p] = len(words)-1
             
-    return (out_degree)
+    return out_degree
 
+# extract nodes of 0-degree from degree dictionary
 def extract_nodegree(degree):
     N = len(degree)
     nodegree_list = filter(lambda x: degree[x]==0, degree.keys())
     return dict(zip(nodegree_list, [True,]*N))
 
+# calculate entropy of probability list
 def calc_entropy(probs):
     return sum([-1*p*math.log(p,2) for p in probs])
-    #print >>sys.stderr, "entropy", entropy
 
-    #return math.pow(2,entropy)
 
+# iterate pagerank. calculate next step probability list
 def next_pr(filename, pr, out_degree, sinks=None, d=0.85):
     if sinks is None: sinks = extract_nodegree(out_degree)
 
@@ -39,7 +37,7 @@ def next_pr(filename, pr, out_degree, sinks=None, d=0.85):
     sinkPR = sum([pr[p] for p in sinks])
     N = len(pr)
 
-    # Init probs with jump
+    # Init probs with jump (based on sinkPR + random_jump)
     new_pr = {}
     for p in out_degree:
         new_pr[p] = (1-d)/N + d*sinkPR/N
@@ -54,6 +52,7 @@ def next_pr(filename, pr, out_degree, sinks=None, d=0.85):
                 new_pr[p] += d*pr[q]/out_degree[q]
     return new_pr
 
+# Calculate various statistics: probability sum, entropy, and perplexity
 def calc_stats(pr):
     prob_sum = sum(pr.values())
     entropy = calc_entropy(pr.values())
@@ -62,9 +61,7 @@ def calc_stats(pr):
 
 
 def main():
-    #if len(sys.argv)<2: raise Exception(" ".join(["usage:",sys.argv[0],"<input file>"]))
-    #filename = sys.argv[1]
-
+    # program argument settings
     parser = argparse.ArgumentParser(description='Input options for program.')
     parser.add_argument('graph_filename', help="Input graph file")
     parser.add_argument('--halt_perplexity', help="Halt process when perplexity stop changing more than given value", type=float)
@@ -75,6 +72,7 @@ def main():
     parser.add_argument('--print_urls', help="Print urls to pages")
     args = parser.parse_args()
 
+    # calculate basic values: out_degree dictionary, sink nodes, total number of nodes, probability list
     out_degree = get_degree(args.graph_filename)
     sinks = extract_nodegree(out_degree)
     N = len(out_degree)
@@ -87,6 +85,7 @@ def main():
     # For debugging, print Iteration info
     print >>sys.stderr, "Iteration",i,": "," ".join(["%s(%.4f)" % (x[0],x[1]) for x in stats])
 
+    # prepare to print pagerank values and perplexity of each iteration
     if args.print_probs: prob_ofile = open(args.print_probs,'w')
     if args.print_perp: perp_ofile = open(args.print_perp,'w')
 
@@ -121,13 +120,16 @@ def main():
     if args.print_probs: prob_ofile.close()
     if args.print_perp: perp_ofile.close()
 
-
+    # sort final probability in descending order
     pr_sorted = sorted(pr.items(), key=lambda x:x[1],reverse=True)
+
+    # print probability of each page
     if args.print_result:
         with open(args.print_result, 'w') as result_ofile:
             for p,v in pr_sorted:
                 print >>result_ofile, p, v
 
+    # print lemur link of each page for easy searching
     if args.print_urls:
         with open(args.print_urls, 'w') as url_ofile:
             for p,v in pr_sorted:
