@@ -18,6 +18,6 @@ $SRC_DIR/pagerank.py $DATA_DIR/wt2g_inlinks --halt_perplexity 1.0 --print_perp $
 
 # Rank nodes by inlink
 cat $DATA_DIR/wt2g_inlinks | perl -lane '$h{$F[0]}=$#F;END{@k=sort{$h{$b}<=>$h{$a}}keys(%h); for(@k[0..99]){print join(" ",$_,$h{$_});}}'  > $OUT_DIR/wt2g.inlinks
-cat $OUT_DIR/wt2g.inlinks | perl -lane 'print "<a href=\"http://fiji4.ccs.neu.edu/~zerg/lemurcgi_IRclass/lemur.cgi?d=0&e=$F[0]\">$F[0]</a> $F[1]";' > $OUT_DIR/wt2g.inlinks.urls
+cat $OUT_DIR/wt2g.inlinks | perl -lane 'print "<a href=\"http://fiji4.ccs.neu.edu/~zerg/lemurcgi_IRclass/lemur.cgi?d=0&e=$F[0]\">$F[0]</a> $F[1]<br/>";' > $OUT_DIR/wt2g.inlinks.html
 
 
