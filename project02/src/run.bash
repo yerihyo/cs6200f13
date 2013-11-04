@@ -20,19 +20,23 @@ if [ ! -s $OUT_DIR/dump.result ]; then
     tail -n +9 $OUT_DIR/dump.result | head -n -8 | $FILE_DIR/get_doc_len.py
 fi
 
-type=pm
+type="none"
+options=`sed 's/^none//' $type | sed -e "s/\(.\)/ -\1/g"`
 cat $DATA_DIR/desc.51-100.short \
-    | $FILE_DIR/query2url.py "$BASE_URL" \
+    | $FILE_DIR/query2url.py $options "$BASE_URL" \
     | while read q_no url; do
 
     q_id="q$q_no"
     OUT_Q_DIR=$OUT_DIR/query/$q_id
     mkdir -p $OUT_Q_DIR
 
-    echo === wget "'$url'" ===
-    wget $url -O $OUT_Q_DIR/$type.result
+    if [ ! -s $OUT_Q_DIR/$type.result ]; then
+	echo === wget "'$url'" ===
+	wget $url -O $OUT_Q_DIR/$type.result
+    fi
 
-    tail -n +9 $OUT_Q_DIR/$type.result | head -n -8 > $OUT_DIR/$q_id/$type.result.cln
+    tail -n +9 $OUT_Q_DIR/$type.result | head -n -8 > $OUT_Q_DIR/$type.result.cln
 
-    cat $OUT_DIR/$q_id/$type.result.cln | $FILE_DIR/parse_result.py
+    #cat $OUT_DIR/$q_id/$type.result.cln | $FILE_DIR/parse_result.py
+    exit
 done

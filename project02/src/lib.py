@@ -17,7 +17,7 @@ def file2results(f):
 
         if len(tokens) not in [2,3]: raise Exception(l)
         if len(tokens)==2:
-            if lines_left==0: yield (ctf, df, tf_dict)
+            if lines_left==0: yield (ctf, df, tf_dict, None)
             elif lines_left is not None: raise Exception()
 
             ctf, df = (int(w) for w in tokens)

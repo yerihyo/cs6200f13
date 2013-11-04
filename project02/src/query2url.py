@@ -23,8 +23,8 @@ def get_DBID(args):
 non_alnum = re.compile('[\W_]+')
 def q_str2no_terms(q_str):
     [no,raw] = q_str.split('.',1)
-    raw = raw.strip().rstrip('.')
-    terms = [non_alnum.sub('',s) for s in raw.split(" ")[3:]]
+    raw = non_alnum.sub(' ',raw.strip().rstrip('.'))
+    terms = raw.split(" ")[3:]
     return (int(no.strip()),terms)
 
 def main():
