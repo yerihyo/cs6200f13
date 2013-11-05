@@ -5,7 +5,6 @@ import sys
 doc_count=84678
 avg_doc_len=467.521221569 # got it from dump.result
 
-
 def file2results(f):
     lines_left = ctf = df = None
     doc_len_list = [None]*doc_count
@@ -17,7 +16,7 @@ def file2results(f):
 
         if len(tokens) not in [2,3]: raise Exception(l)
         if len(tokens)==2:
-            if lines_left==0: yield (ctf, df, tf_dict, None)
+            if lines_left==0: yield (ctf, df, tf_dict, doc_len_list) # doc_len_list is incomplete
             elif lines_left is not None: raise Exception()
 
             ctf, df = (int(w) for w in tokens)

@@ -22,17 +22,16 @@ fi
 
 type="none"
 options=`sed 's/^none//' $type | sed -e "s/\(.\)/ -\1/g"`
-cat $DATA_DIR/desc.51-100.short \
-    | $FILE_DIR/query2url.py $options "$BASE_URL" \
-    | while read q_no url; do
+cat $DATA_DIR/desc.51-100.short | while read q_no raw_query; do
+    url=`echo $raw_query | $FILE_DIR/query2url.py $options "$BASE_URL"`
 
     q_id="q$q_no"
     OUT_Q_DIR=$OUT_DIR/query/$q_id
     mkdir -p $OUT_Q_DIR
 
     if [ ! -s $OUT_Q_DIR/$type.result ]; then
-	echo === wget "'$url'" ===
-	wget $url -O $OUT_Q_DIR/$type.result
+	    echo === wget "'$url'" ===
+	    wget $url -O $OUT_Q_DIR/$type.result
     fi
 
     tail -n +9 $OUT_Q_DIR/$type.result | head -n -8 > $OUT_Q_DIR/$type.result.cln

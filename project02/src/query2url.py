@@ -21,9 +21,10 @@ def get_DBID(args):
     return dbid
 
 non_alnum = re.compile('[\W_]+')
-def q_str2no_terms(q_str):
-    [no,raw] = q_str.split('.',1)
-    raw = non_alnum.sub(' ',raw.strip().rstrip('.'))
+def q_str2terms(q_str):
+    raw = q_str.split('.',1)
+    raw = raw.strip().rstrip('.').replace('.','')
+    raw = non_alnum.sub(' ',raw)
     terms = raw.split(" ")[3:]
     return (int(no.strip()),terms)
 
@@ -34,12 +35,12 @@ def main():
     t = 'v' #if args.m else 'c'
 
     for q_str in sys.stdin:
-        (q_no,q_terms) = q_str2no_terms(q_str)
+        q_terms = q_str2terms(q_str)
     
         for q_term in q_terms:
             params.append( (t,q_term) )
 
-        print q_no, "%s?%s" % (args.BASE_URL,urllib.urlencode(params))
+        print "%s?%s" % (args.BASE_URL,urllib.urlencode(params))
 
 
 if __name__ == "__main__":
