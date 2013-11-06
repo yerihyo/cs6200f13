@@ -83,8 +83,8 @@ def main():
 
     for i, r in enumerate(ranked_list[:min(len(ranked_list),1000)]):
         doc_id, score = r
-        doc_fullid = doc_id
-        #doc_fullid = docid_int2ext[doc_id]
+        #doc_fullid = doc_id
+        doc_fullid = docid_int2ext[doc_id-1]
         tokens = ( args.QUERY_NO, 'Q0', doc_fullid, (i+1), score, 'Exp')
         print " ".join([str(x) for x in tokens])
 

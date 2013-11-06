@@ -40,7 +40,7 @@ for pm in none; do # stop & stem
         fi
 
         # cat $OUT_PM_DIR/wget/Q$q_no.cln | perl -lane 'print join("\t",@F) if $#F==1 or $F[0]==60222'
-        break # DEBUG
+        #break # DEBUG
     done
     #break
 
@@ -56,19 +56,17 @@ for pm in none; do # stop & stem
                 | $FILE_DIR/parse_wget.py $DATA_DIR/doclist.txt $fe $q_no $options "$q_str" \
                 > $OUT_PM_DIR/result/$fe/Q$q_no
 
-            #continue
+            continue
             #break # DEBUG
-            cat $DATA_DIR/qrels.adhoc.51-100.AP89 | perl -lane 'print join(" ",@F) if $F[0]=='$q_no';' \
-                > $TMP_DIR/Q$q_no.qrel.adhoc
             cat $DATA_DIR/qrel.irclass10X1 | perl -lane 'print join(" ",@F) if $F[0]=='$q_no';' \
                 > $TMP_DIR/Q$q_no.qrel.irclass10X1
-            $BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel.adhoc $OUT_PM_DIR/result/$fe/Q$q_no
+            $BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel $OUT_PM_DIR/result/$fe/Q$q_no
             #$BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel.irclass10X1 $OUT_PM_DIR/result/$fe/Q$q_no
-            break
+            #break
         done
         cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
 
-        #$BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all
+        $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all
         #break # DEBUG
     done
 done
