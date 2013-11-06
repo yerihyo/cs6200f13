@@ -4,7 +4,7 @@ import sys
 import argparse
 import urllib
 import re
-
+import lib
 
 def process_args():
     parser = argparse.ArgumentParser(description='Process options.')
@@ -20,14 +20,6 @@ def get_DBID(args):
     if args.m: dbid +=1
     return dbid
 
-non_alnum = re.compile('[\W_]+')
-def q_str2terms(q_str):
-    raw = q_str.split('.',1)
-    raw = raw.strip().rstrip('.').replace('.','')
-    raw = non_alnum.sub(' ',raw)
-    terms = raw.split(" ")[3:]
-    return (int(no.strip()),terms)
-
 def main():
     args = process_args()
     dbid = get_DBID(args)
@@ -35,7 +27,7 @@ def main():
     t = 'v' #if args.m else 'c'
 
     for q_str in sys.stdin:
-        q_terms = q_str2terms(q_str)
+        q_terms = lib.q_str2q_terms(q_str)
     
         for q_term in q_terms:
             params.append( (t,q_term) )

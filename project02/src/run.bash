@@ -20,22 +20,35 @@ if [ ! -s $OUT_DIR/dump.result ]; then
     tail -n +9 $OUT_DIR/dump.result | head -n -8 | $FILE_DIR/get_doc_len.py
 fi
 
-type="none"
-options=`sed 's/^none//' $type | sed -e "s/\(.\)/ -\1/g"`
-cat $DATA_DIR/desc.51-100.short | while read q_no raw_query; do
-    url=`echo $raw_query | $FILE_DIR/query2url.py $options "$BASE_URL"`
+for pm in none; do # stop & stem
+    options=`echo $pm | sed 's/^none//' | sed -e "s/\(.\)/ -\1/g"`
+    OUT_PM_DIR=$OUT_DIR/$pm
+    mkdir -p $OUT_PM_DIR/wget
 
-    q_id="q$q_no"
-    OUT_Q_DIR=$OUT_DIR/query/$q_id
-    mkdir -p $OUT_Q_DIR
+    cat $DATA_DIR/desc.51-100.short | while read q_no_raw q_str; do
+        q_no=`echo $q_no_raw | sed 's/\.$//'`
+        url=`echo "$q_str" | $FILE_DIR/query2url.py $options "$BASE_URL"`
 
-    if [ ! -s $OUT_Q_DIR/$type.result ]; then
-	    echo === wget "'$url'" ===
-	    wget $url -O $OUT_Q_DIR/$type.result
-    fi
+        if [ ! -s $OUT_PM_DIR/wget/Q$q_no ]; then
+	        echo === wget "'$url'" ===
+	        wget $url -O $OUT_PM_DIR/wget/Q$q_no
+        fi
 
-    tail -n +9 $OUT_Q_DIR/$type.result | head -n -8 > $OUT_Q_DIR/$type.result.cln
+        tail -n +9 $OUT_PM_DIR/wget/Q$q_no | head -n -8 > $OUT_PM_DIR/wget/Q$q_no.cln
+        break # DEBUG
+    done
 
-    #cat $OUT_DIR/$q_id/$type.result.cln | $FILE_DIR/parse_result.py
-    exit
+    for fe in OKTF; do
+        mkdir -p $OUT_PM_DIR/result/$fe
+
+        cat $DATA_DIR/desc.51-100.short | while read q_no_raw q_str; do
+            q_no=`echo $q_no_raw | sed 's/\.$//'`
+            cat $OUT_PM_DIR/wget/Q$q_no.cln \
+                | $FILE_DIR/parse_wget.py $fe $q_no "$q_str" \
+                > $OUT_PM_DIR/result/$fe/Q$q_no
+            break # DEBUG
+        done
+        cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
+        break # DEBUG
+    done
 done
