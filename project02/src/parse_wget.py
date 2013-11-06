@@ -10,14 +10,16 @@ h_fe = {
 
 def process_args():
     parser = argparse.ArgumentParser(description='Process options.')
+    parser.add_argument('DOCLIST', type=str, help='internal2external doc id mapping file')
     parser.add_argument('FE', type=str, help='feature extractor name')
     parser.add_argument('QUERY_NO', type=int, help='query no')
     parser.add_argument('QUERY_TERMS', type=str, help='query terms')
     args = parser.parse_args()
     return args
 
-def file_2_doc2fv(f, fe):
+def file_2_doc2fv(f, fe, term_count=None):
     doc2fv = {} # doc2feature_vector
+
     for term_id, (ctf, df, tf_dict, doc_len_list) in enumerate(lib.file2results(f)):
 
         for doc_id, tf in tf_dict.iteritems():
@@ -30,6 +32,9 @@ def file_2_doc2fv(f, fe):
 
             v = fe(tf, doc_len, lib.avg_doc_len)
             doc_fv[term_id] = v
+
+    if term_count is not None and term_id+1 != term_count:
+        raise Exception("%d vs %d" % (term_id, term_count) )
 
     return doc2fv
 
@@ -54,15 +59,17 @@ def get_ranked_list(query_fv, doc2fv):
 def main():
     args = process_args()
     q_terms = lib.q_str2q_terms(args.QUERY_TERMS)
+    with open(args.DOCLIST) as f:
+        docid_int2ext = list(lib.file2tokens(f,1,token_count_per_line=2))
 
     fe = h_fe[args.FE]
     query_fv = q_terms2feature_vector(q_terms, fe)
-    doc2fv = file_2_doc2fv(sys.stdin, fe)
+    doc2fv = file_2_doc2fv(sys.stdin, fe, term_count=len(q_terms))
     ranked_list = get_ranked_list(query_fv, doc2fv)
 
     for i, r in enumerate(ranked_list[:min(len(ranked_list),1000)]):
         doc_id, score = r
-        tokens = ( args.QUERY_NO, 'Q0', doc_id, (i+1), score )
+        tokens = ( args.QUERY_NO, 'Q0', docid_int2ext[doc_id], (i+1), score, 'Exp')
         print " ".join([str(x) for x in tokens])
 
 

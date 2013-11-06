@@ -26,6 +26,17 @@ def q_str2q_terms(q_str):
 def get_OKTF(tf, doc_len, avg_doc_len):
     return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )
 
+def file2tokens(f, indices, delim=None, token_count_per_line=None):
+    for l in f:
+        if delim is None: tokens = l.split()
+        else: tokens = l.split(delim)
+
+        if token_count_per_line is not None and len(tokens)!=token_count_per_line:
+            raise Exception(len(tokens))
+
+        if isinstance(indices,int): yield tokens[indices]
+        else: yield tuple(tokens[i] for i in indices)
+        
 def file2results(f):
     lines_left = ctf = df = None
     doc_len_list = [None]*doc_count
