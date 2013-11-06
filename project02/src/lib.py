@@ -5,7 +5,9 @@ import re
 import math
 
 doc_count=84678
-avg_doc_len=467.521221569 # got it from dump.result
+
+#67.521221569 # got it from dump.result
+avg_doc_len_list=[493,493,288,288]
 
 non_alnum = re.compile('[\W_]+')
 """
@@ -21,7 +23,7 @@ def q_str2q_terms(q_str):
     raw = q_str.strip().rstrip('.').replace('.','')
     raw = non_alnum.sub(' ',raw)
     terms = raw.split(" ")[3:]
-    return terms
+    return sorted(set(terms))
 
 def get_OKTF(tf, doc_len, avg_doc_len):
     return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )
@@ -72,9 +74,12 @@ def file2results(f):
 def vector2len(v):
     return math.sqrt(sum([v[x]**2 for x in v.keys()]))
 
-def get_cosine(vec1, vec2, len1=None, len2=None):
+def get_innerproduct(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
-    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+    return sum([vec1[x] * vec2[x] for x in intersection])
+
+def get_cosine(vec1, vec2, len1=None, len2=None):
+    numerator = get_innerproduct(vec1,vec2)
 
     if len1 is None: len1 = vector2len(vec1)
     if len2 is None: len2 = vector2len(vec2)
