@@ -15,6 +15,7 @@ doc_count=84678
 
 #67.521221569 # got it from dump.result
 avg_doc_len_list=[493,493,288,288]
+uniq_term_count=[207615,166242,207224,166054]
 
 non_alnum = re.compile('[\W_]+')
 """
@@ -58,11 +59,14 @@ def q_str2q_terms(q_str,args):
             
     return sorted(terms)
 
-def get_OKTF(tf, doc_len, avg_doc_len, df):
+def get_OKTF(tf, doc_len, avg_doc_len, df,uniq_term_count):
     return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )
 
-def get_OKTF_IDF(tf, doc_len, avg_doc_len,df):
+def get_OKTF_IDF(tf, doc_len, avg_doc_len,df,uniq_term_count):
     return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )/df
+
+def get_LM_LAPLACE(tf, doc_len, avg_doc_len,df,uniq_term_count):
+    return float(tf+1)/(doc_len+uniq_term_count)
 
 def file2tokens(f, indices, delim=None, token_count_per_line=None):
     for l in f:
