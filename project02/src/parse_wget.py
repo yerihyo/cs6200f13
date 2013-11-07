@@ -3,10 +3,13 @@
 import sys
 import lib
 import argparse
-
+import copy
 h_fe = {
     'OKTF': (lib.get_OKTF, lib.get_innerproduct),
     'OKTF_IDF': (lib.get_OKTF_IDF, lib.get_innerproduct),
+    'LM_LAPLACE': (lib.get_LM_LAPLACE, lib.get_innerproduct),
+    'LM_JM': (lib.get_LM_JM, lib.get_innerproduct),
+    'BM25_log': (lib.get_BM25_log, lib.get_sum),
 }
 
 def process_args():
@@ -20,41 +23,52 @@ def process_args():
     args = parser.parse_args()
     return args
 
-def file_2_doc2fv(f, func_fe, avg_doc_len, term_count=None):
+def file_2_doc2fv(f, func_fe, fe_kwargs, q_term_count=None):
     doc2fv = {} # doc2feature_vector
-    df_list = []
+    stat_list = []
+
+    kwargs = copy.copy(fe_kwargs)
+    kwargs['doc_type'] = 'doc'
 
     for term_id, (ctf, df, tf_dict, doc_len_list) in enumerate(lib.file2results(f)):
+        if not ctf: raise Exception(ctf)
         if not df: raise Exception(df)
-        df_list.append(df)
+        stat_list.append( {'df':df, 'ctf':ctf } )
+        kwargs.update( {'df':df, 'ctf':ctf } )
 
         for doc_id, tf in tf_dict.iteritems():
-            
+
+            kwargs['tf'] = tf
+
             if doc_id not in doc2fv: doc2fv[doc_id] = {}
             doc_fv = doc2fv[doc_id]
 
-            doc_len = doc_len_list[doc_id-1]
-            if doc_len is None: raise Exception()
+            kwargs['doc_len'] = doc_len_list[doc_id-1]
+            if kwargs['doc_len'] is None: raise Exception()
 
-            v = func_fe(tf, doc_len, avg_doc_len, df)
+            v = func_fe(**kwargs)
             doc_fv[term_id] = v
 
-    if term_count is not None and term_id+1 != term_count:
-        raise Exception("%d vs %d" % (term_id, term_count) )
+    if q_term_count is not None and term_id+1 != q_term_count:
+        raise Exception("%d vs %d" % (term_id, q_term_count) )
 
-    return (doc2fv,df_list)
+    return (doc2fv,stat_list)
 
-def q_terms2feature_vector(terms, func_fe, df_list):
+def q_terms2feature_vector(terms, func_fe, stat_list, fe_kwargs):
+    kwargs = copy.copy(fe_kwargs)
+    kwargs['tf'] = 1
+    kwargs['doc_len'] = len(terms)
+    kwargs['doc_type'] = 'query'
+
     fv = {} #dict([(fe_name,{}) for fe_name in FEs])
     doc_len = len(terms)
     for term_id, term in enumerate(terms):
-        df = df_list[term_id]
-        if not df: raise Exception(df_list)
+        kwargs.update(stat_list[term_id])
 
-        v = func_fe(1, len(terms), len(terms), df)
-        #v = func_fe(1, len(terms), lib.avg_doc_len)
+        #v = func_fe(1, len(terms), len(terms), df, uniq_term_count)
+        v = func_fe(**kwargs)
         fv[term_id] = v
-    if term_id+1 != len(df_list): raise Exception("%d vs %d" % (term_id,df_list) )
+    if term_id+1 != len(stat_list): raise Exception("%d vs %d" % (term_id,stat_list) )
     return fv
 
 def get_ranked_list(query_fv, doc2fv, func_sim):
@@ -69,17 +83,20 @@ def get_ranked_list(query_fv, doc2fv, func_sim):
 
 def main():
     args = process_args()
-    dbid = lib.get_DBID(args)
-    avg_doc_len = lib.avg_doc_len_list[dbid]
 
     q_terms = lib.q_str2q_terms(args.QUERY_TERMS, args)
     print >>sys.stderr, "TERMS:", " ".join(q_terms)
     with open(args.DOCLIST) as f:
         docid_int2ext = list(lib.file2tokens(f,1,token_count_per_line=2))
 
+        
+    dbid = lib.get_DBID(args)
+    fe_kwargs = copy.copy(lib.corpus_stats[dbid])
+    fe_kwargs['lambda'] = 0.2
+
     fe = h_fe[args.FE]
-    doc2fv,df_list = file_2_doc2fv(sys.stdin, fe[0], avg_doc_len, term_count=len(q_terms))
-    query_fv = q_terms2feature_vector(q_terms, fe[0], df_list)
+    doc2fv, stat_list = file_2_doc2fv(sys.stdin, fe[0], fe_kwargs, q_term_count=len(q_terms))
+    query_fv = q_terms2feature_vector(q_terms, fe[0], stat_list, fe_kwargs)
     #print >>sys.stderr, query_fv
     
     ranked_list = get_ranked_list(query_fv, doc2fv, fe[1])

@@ -14,8 +14,14 @@ DATA_DIR = os.path.join(BASE_DIR,'data')
 doc_count=84678
 
 #67.521221569 # got it from dump.result
-avg_doc_len_list=[493,493,288,288]
-uniq_term_count=[207615,166242,207224,166054]
+corpus_stats=[
+    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':207615, 'AVE_DOCLEN':493},
+    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':166242, 'AVE_DOCLEN':493}, 
+    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':207224, 'AVE_DOCLEN':288}, 
+    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':166054, 'AVE_DOCLEN':288}, 
+    ]
+# avg_doc_len_list=[493,493,288,288]
+# uniq_term_count_list=[207615,166242,207224,166054]
 
 non_alnum = re.compile('[\W_]+')
 """
@@ -59,14 +65,39 @@ def q_str2q_terms(q_str,args):
             
     return sorted(terms)
 
-def get_OKTF(tf, doc_len, avg_doc_len, df,uniq_term_count):
-    return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )
+### Feature Extraction
+def get_OKTF(**kwargs):
+    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_DOCLEN'] )
 
-def get_OKTF_IDF(tf, doc_len, avg_doc_len,df,uniq_term_count):
-    return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )/df
+def get_OKTF_IDF(**kwargs):
+    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_DOCLEN'] )/kwargs['df']
 
-def get_LM_LAPLACE(tf, doc_len, avg_doc_len,df,uniq_term_count):
-    return float(tf+1)/(doc_len+uniq_term_count)
+def get_LM_LAPLACE(**kwargs):
+    return float(kwargs['tf']+1)/(kwargs['doc_len']+kwargs['NUM_UNIQUE_TERMS'])
+
+def get_LM_JM(**kwargs):
+    return kwargs['lambda']*float(kwargs['tf'])/kwargs['doc_len'] + (1-kwargs['lambda'])*kwargs['ctf']/kwargs['NUM_TERMS']
+
+
+def get_BM25_log(**kwargs):
+    k1 = 1.2
+    b = 0.75
+    k2 = 100
+
+    if kwargs['doc_type'] == 'doc':
+        k_top = k1
+        k_bottom = k1*((1-b) + b*kwargs['doc_len']/kwargs['AVE_DOCLEN']) 
+        c = log(kwargs['NUM_DOCS']-kwargs['df']+0.5) - log(kwargs['df']+0.5)
+    elif kwargs['doc_type'] == 'query':
+        k_top = k2
+        k_bottom = k2
+        c = 0
+    else: raise Exception()
+
+    return c + log(k_top+1) + log(kwargs['tf']) - log(k_bottom+kwargs['tf'])
+
+
+
 
 def file2tokens(f, indices, delim=None, token_count_per_line=None):
     for l in f:
@@ -123,6 +154,14 @@ def vector2len(v):
 def get_innerproduct(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
     return sum([vec1[x] * vec2[x] for x in intersection])
+
+def get_log_sum(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    return sum([ log(vec1[x]) + log(vec2[x]) for x in intersection])
+
+def get_sum(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    return sum([ vec1[x] + vec2[x] for x in intersection])
 
 def get_cosine(vec1, vec2, len1=None, len2=None):
     numerator = get_innerproduct(vec1,vec2)
