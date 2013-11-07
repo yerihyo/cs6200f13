@@ -45,7 +45,7 @@ for pm in pm; do # stop & stem
     done
     #break
 
-    for fe in LM_JM; do # OKTF_IDF; do
+    for fe in BM25_log; do #LM_JM; do # OKTF_IDF; do
         echoerr "=== Using '$fe' ===="
         mkdir -p $OUT_PM_DIR/result/$fe
 

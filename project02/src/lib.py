@@ -76,7 +76,8 @@ def get_LM_LAPLACE(**kwargs):
     return float(kwargs['tf']+1)/(kwargs['doc_len']+kwargs['NUM_UNIQUE_TERMS'])
 
 def get_LM_JM(**kwargs):
-    return kwargs['lambda']*float(kwargs['tf'])/kwargs['doc_len'] + (1-kwargs['lambda'])*kwargs['ctf']/kwargs['NUM_TERMS']
+    l = 0.2
+    return l*float(kwargs['tf'])/kwargs['doc_len'] + (1-l)*kwargs['ctf']/kwargs['NUM_TERMS']
 
 
 def get_BM25_log(**kwargs):
@@ -87,14 +88,14 @@ def get_BM25_log(**kwargs):
     if kwargs['doc_type'] == 'doc':
         k_top = k1
         k_bottom = k1*((1-b) + b*kwargs['doc_len']/kwargs['AVE_DOCLEN']) 
-        c = log(kwargs['NUM_DOCS']-kwargs['df']+0.5) - log(kwargs['df']+0.5)
+        c = math.log(kwargs['NUM_DOCS']-kwargs['df']+0.5) - math.log(kwargs['df']+0.5)
     elif kwargs['doc_type'] == 'query':
         k_top = k2
         k_bottom = k2
         c = 0
     else: raise Exception()
 
-    return c + log(k_top+1) + log(kwargs['tf']) - log(k_bottom+kwargs['tf'])
+    return c + math.log(k_top+1) + math.log(kwargs['tf']) - math.log(k_bottom+kwargs['tf'])
 
 
 
@@ -157,7 +158,7 @@ def get_innerproduct(vec1, vec2):
 
 def get_log_sum(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
-    return sum([ log(vec1[x]) + log(vec2[x]) for x in intersection])
+    return sum([ math.log(vec1[x]) + math.log(vec2[x]) for x in intersection])
 
 def get_sum(vec1, vec2):
     intersection = set(vec1.keys()) & set(vec2.keys())
