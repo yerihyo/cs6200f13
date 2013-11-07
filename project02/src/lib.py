@@ -15,10 +15,10 @@ doc_count=84678
 
 #67.521221569 # got it from dump.result
 corpus_stats=[
-    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':207615, 'AVE_DOCLEN':493},
-    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':166242, 'AVE_DOCLEN':493}, 
-    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':207224, 'AVE_DOCLEN':288}, 
-    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':166054, 'AVE_DOCLEN':288}, 
+    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':207615, 'AVE_LEN':{'doc':493} },
+    {'NUM_DOCS':84678, 'NUM_TERMS':41802513, 'NUM_UNIQUE_TERMS':166242, 'AVE_LEN':{'doc':493} }, 
+    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':207224, 'AVE_LEN':{'doc':288,'query':7.12}, }, 
+    {'NUM_DOCS':84678, 'NUM_TERMS':24401877, 'NUM_UNIQUE_TERMS':166054, 'AVE_LEN':{'doc':288,'query':7.12}, }, 
     ]
 # avg_doc_len_list=[493,493,288,288]
 # uniq_term_count_list=[207615,166242,207224,166054]
@@ -36,7 +36,8 @@ def get_stem_dict():
     filename = os.path.join(DATA_DIR, 'stem-classes.lst')
     h = {}
     with open(filename) as f:
-        for l in f:
+        for i, l in enumerate(f):
+            if i==0: continue
             tokens = re.split("\s*\|\s*",l.strip())
             if len(tokens)!=2: raise Exception()
             for w in tokens[1].split():
@@ -55,22 +56,32 @@ def q_str2q_terms(q_str,args):
     raw = non_alnum.sub(' ',raw)
     terms = set(raw.split(" ")[3:])
 
+    if args.p:
+        stopwords = get_stopwords()
+        terms = terms - stopwords
+
     if args.m:
         h = get_stem_dict()
         terms = set([h[x] for x in terms])
 
-    if args.p:
-        stopwords = get_stopwords()
-        terms = terms - stopwords
             
     return sorted(terms)
 
 ### Feature Extraction
+def get_TFIDF_vanilla(**kwargs):
+    return kwargs['tf']/kwargs['df']
+
+def get_TFIDF_wikipedia(**kwargs):
+    return (0.5 + 0.5*kwargs['tf']) * ( math.log(kwargs['NUM_DOCS']) - math.log(kwargs['df']) )
+
+def get_TFIDF_CS6200(**kwargs):
+    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'])
+
 def get_OKTF(**kwargs):
-    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_DOCLEN'] )
+    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_LEN'][kwargs['doc_type']] )
 
 def get_OKTF_IDF(**kwargs):
-    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_DOCLEN'] )/kwargs['df']
+    return kwargs['tf']/(kwargs['tf'] + 0.5 + 1.5 * kwargs['doc_len'] / kwargs['AVE_LEN'][kwargs['doc_type']] )/kwargs['df']
 
 def get_LM_LAPLACE(**kwargs):
     return float(kwargs['tf']+1)/(kwargs['doc_len']+kwargs['NUM_UNIQUE_TERMS'])
@@ -87,7 +98,7 @@ def get_BM25_log(**kwargs):
 
     if kwargs['doc_type'] == 'doc':
         k_top = k1
-        k_bottom = k1*((1-b) + b*kwargs['doc_len']/kwargs['AVE_DOCLEN']) 
+        k_bottom = k1*((1-b) + b*kwargs['doc_len']/kwargs['AVE_LEN'][kwargs['doc_type']] ) 
         c = math.log(kwargs['NUM_DOCS']-kwargs['df']+0.5) - math.log(kwargs['df']+0.5)
     elif kwargs['doc_type'] == 'query':
         k_top = k2

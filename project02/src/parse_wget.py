@@ -5,6 +5,13 @@ import lib
 import argparse
 import copy
 h_fe = {
+    'TFIDF_vanilla':       (lib.get_TFIDF_vanilla, lib.get_innerproduct),
+    'TFIDF_vanilla_cos':   (lib.get_TFIDF_vanilla, lib.get_cosine),
+    'TFIDF_wikipedia':     (lib.get_TFIDF_wikipedia, lib.get_innerproduct),
+    'TFIDF_wikipedia_cos': (lib.get_TFIDF_wikipedia, lib.get_cosine),
+
+    'TFIDF_CS6200': (lib.get_TFIDF_CS6200, lib.get_innerproduct),
+
     'OKTF': (lib.get_OKTF, lib.get_innerproduct),
     'OKTF_IDF': (lib.get_OKTF_IDF, lib.get_innerproduct),
     'LM_LAPLACE': (lib.get_LM_LAPLACE, lib.get_innerproduct),
@@ -35,6 +42,10 @@ def file_2_doc2fv(f, func_fe, fe_kwargs, q_term_count=None):
         if not df: raise Exception(df)
         stat_list.append( {'df':df, 'ctf':ctf } )
         kwargs.update( {'df':df, 'ctf':ctf } )
+
+        doc_len_list_not_none = filter(lambda x: x is not None, doc_len_list)
+        #if q_term_count != len(doc_len_list_not_none):
+        #    raise Exception("%d vs %d" % (q_term_count, len(doc_len_list_not_none) ) )
 
         for doc_id, tf in tf_dict.iteritems():
 
@@ -92,7 +103,6 @@ def main():
         
     dbid = lib.get_DBID(args)
     fe_kwargs = copy.copy(lib.corpus_stats[dbid])
-    fe_kwargs['lambda'] = 0.2
 
     fe = h_fe[args.FE]
     doc2fv, stat_list = file_2_doc2fv(sys.stdin, fe[0], fe_kwargs, q_term_count=len(q_terms))

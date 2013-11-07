@@ -28,6 +28,7 @@ for pm in pm; do # stop & stem
     OUT_PM_DIR=$OUT_DIR/$pm
     mkdir -p $OUT_PM_DIR/wget
 
+    # Query lemur
     cat $DATA_DIR/desc.51-100.short | grep -v '^$' | while read q_no_raw q_str; do
         q_no=`echo $q_no_raw | sed 's/\.$//'`
         if [ -s $OUT_PM_DIR/wget/Q$q_no.cln ]; then continue; fi
@@ -39,35 +40,33 @@ for pm in pm; do # stop & stem
 	    echoerr === wget "'$url'" ===
 	    wget $url -O $OUT_PM_DIR/wget/Q$q_no
         tail -n +9 $OUT_PM_DIR/wget/Q$q_no | head -n -8 > $OUT_PM_DIR/wget/Q$q_no.cln
-
-        # cat $OUT_PM_DIR/wget/Q$q_no.cln | perl -lane 'print join("\t",@F) if $#F==1 or $F[0]==60222'
-        #break # DEBUG
     done
-    #break
 
-    for fe in BM25_log; do #LM_JM; do # OKTF_IDF; do
+
+    # real retrieval
+    for fe in BM25_log; do #LM_JM; do #BM25_log; do #LM_JM; do # OKTF_IDF; do
         echoerr "=== Using '$fe' ===="
         mkdir -p $OUT_PM_DIR/result/$fe
 
         cat $DATA_DIR/desc.51-100.short | grep -v '^$' | while read q_no_raw q_str; do
             q_no=`echo $q_no_raw | sed 's/\.$//'`
-            echoerr "=== Working on 'Q$q_no' ===="
+            if [ -s $OUT_PM_DIR/result/$fe/Q$q_no ]; then continue; fi
 
+            echoerr "=== Working on 'Q$q_no' ===="
             cat $OUT_PM_DIR/wget/Q$q_no.cln \
                 | $FILE_DIR/parse_wget.py $DATA_DIR/doclist.txt $fe $q_no $options "$q_str" \
                 > $OUT_PM_DIR/result/$fe/Q$q_no
 
             continue
-            #break # DEBUG
+
+            # Local evaluation setup for debugging
             cat $DATA_DIR/qrel.irclass10X1 | perl -lane 'print join(" ",@F) if $F[0]=='$q_no';' \
                 > $TMP_DIR/Q$q_no.qrel.irclass10X1
             $BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel $OUT_PM_DIR/result/$fe/Q$q_no
-            #$BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel.irclass10X1 $OUT_PM_DIR/result/$fe/Q$q_no
-            #break
         done
         cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
 
-        $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all
-        #break # DEBUG
+        $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $OUT_PM_DIR/result/$fe.eval
+        cat $OUT_PM_DIR/result/$fe.eval
     done
 done
