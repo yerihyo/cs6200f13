@@ -21,7 +21,7 @@ mkdir -p $OUT_DIR $TMP_DIR
 #    tail -n +9 $OUT_DIR/dump.result | head -n -8 | $FILE_DIR/get_doc_len.py
 #fi
 
-for pm in none; do # stop & stem
+for pm in pm; do # stop & stem
     echo "=== Option '$pm' ===="
     options=`echo $pm | sed 's/^none//' | sed -e "s/\(.\)/ -\1/g"`
     OUT_PM_DIR=$OUT_DIR/$pm
@@ -29,22 +29,22 @@ for pm in none; do # stop & stem
 
     cat $DATA_DIR/desc.51-100.short | grep -v '^$' | while read q_no_raw q_str; do
         q_no=`echo $q_no_raw | sed 's/\.$//'`
+        if [ -s $OUT_PM_DIR/wget/Q$q_no.cln ]; then continue; fi
+
         url=`echo "$q_str" | $FILE_DIR/query2url.py $options "$BASE_URL"`
 
         echo "=== Processing 'Q$q_no' : '$url' ===="
 
-        if [ ! -s $OUT_PM_DIR/wget/Q$q_no.cln ]; then
-	        echo === wget "'$url'" ===
-	        wget $url -O $OUT_PM_DIR/wget/Q$q_no
-            tail -n +9 $OUT_PM_DIR/wget/Q$q_no | head -n -8 > $OUT_PM_DIR/wget/Q$q_no.cln
-        fi
+	echo === wget "'$url'" ===
+	wget $url -O $OUT_PM_DIR/wget/Q$q_no
+        tail -n +9 $OUT_PM_DIR/wget/Q$q_no | head -n -8 > $OUT_PM_DIR/wget/Q$q_no.cln
 
         # cat $OUT_PM_DIR/wget/Q$q_no.cln | perl -lane 'print join("\t",@F) if $#F==1 or $F[0]==60222'
         #break # DEBUG
     done
     #break
 
-    for fe in OKTF; do
+    for fe in OKTF OKTF_IDF; do
         echo "=== Using '$fe' ===="
         mkdir -p $OUT_PM_DIR/result/$fe
 

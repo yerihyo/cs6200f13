@@ -5,7 +5,7 @@ import lib
 
 def main():
     for l in sys.stdin:
-        print " ".join( lib.q_str2terms(l) )
+        print " ".join( lib.q_str2terms(l.strip()) )
     
 if __name__ == "__main__":
     main()
