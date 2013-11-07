@@ -3,11 +3,19 @@
 import sys
 import re
 import math
+import os
+
+# directories
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))
+BASE_DIR = os.path.normpath(os.path.join(FILE_DIR, os.pardir))
+DATA_DIR = os.path.join(BASE_DIR,'data')
+
 
 doc_count=84678
 
 #67.521221569 # got it from dump.result
 avg_doc_len_list=[493,493,288,288]
+uniq_term_count=[207615,166242,207224,166054]
 
 non_alnum = re.compile('[\W_]+')
 """
@@ -18,18 +26,51 @@ def q_str2terms(q_str):
     terms = raw.split(" ")[3:]
     return (int(no.strip()),terms)
     """
-def q_str2q_terms(q_str):
-    #raw = q_str.split('.',1)
-    raw = q_str.strip().rstrip('.').replace('.','')
-    raw = non_alnum.sub(' ',raw)
-    terms = raw.split(" ")[3:]
-    return sorted(set(terms))
+def get_stem_dict():
+    filename = os.path.join(DATA_DIR, 'stem-classes.lst')
+    h = {}
+    with open(filename) as f:
+        for l in f:
+            tokens = re.split("\s*\|\s*",l.strip())
+            if len(tokens)!=2: raise Exception()
+            for w in tokens[1].split():
+                h[w] = tokens[0]
 
-def get_OKTF(tf, doc_len, avg_doc_len):
+    return h
+
+def get_stopwords():
+    filename = os.path.join(DATA_DIR, 'stoplist.txt')
+    with open(filename) as f:
+        return set([l.strip() for l in f])
+            
+def q_str2q_terms(q_str,args):
+    #raw = q_str.split('.',1)
+    raw = q_str.strip().rstrip('.').replace('.','').lower()
+    raw = non_alnum.sub(' ',raw)
+    terms = set(raw.split(" ")[3:])
+
+    if args.m:
+        h = get_stem_dict()
+        terms = set([h[x] for x in terms])
+
+    if args.p:
+        stopwords = get_stopwords()
+        terms = terms - stopwords
+            
+    return sorted(terms)
+
+def get_OKTF(tf, doc_len, avg_doc_len, df,uniq_term_count):
     return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )
+
+def get_OKTF_IDF(tf, doc_len, avg_doc_len,df,uniq_term_count):
+    return tf/(tf + 0.5 + 1.5 * doc_len / avg_doc_len )/df
+
+def get_LM_LAPLACE(tf, doc_len, avg_doc_len,df,uniq_term_count):
+    return float(tf+1)/(doc_len+uniq_term_count)
 
 def file2tokens(f, indices, delim=None, token_count_per_line=None):
     for l in f:
+        l = l.strip()
         if delim is None: tokens = l.split()
         else: tokens = l.split(delim)
 
@@ -70,6 +111,11 @@ def file2results(f):
     if lines_left==0: yield (ctf, df, tf_dict, doc_len_list)
     elif lines_left is not None: raise Exception("%d @ %d" % (lines_left, i) )
 
+def get_DBID(args):
+    dbid = 0
+    if args.p: dbid +=2
+    if args.m: dbid +=1
+    return dbid
 
 def vector2len(v):
     return math.sqrt(sum([v[x]**2 for x in v.keys()]))

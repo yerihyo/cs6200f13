@@ -6,6 +6,7 @@ import argparse
 
 h_fe = {
     'OKTF': (lib.get_OKTF, lib.get_innerproduct),
+    'OKTF_IDF': (lib.get_OKTF_IDF, lib.get_innerproduct),
 }
 
 def process_args():
@@ -14,21 +15,18 @@ def process_args():
     parser.add_argument('FE', type=str, help='feature extractor name')
     parser.add_argument('QUERY_NO', type=int, help='query no')
     parser.add_argument('QUERY_TERMS', type=str, help='query terms')
-    parser.add_argument('-p', type=str, help='stopwords file')
-    parser.add_argument('-m', type=str, help='stemlist file')
+    parser.add_argument('-p', action='store_true')
+    parser.add_argument('-m', action='store_true')
     args = parser.parse_args()
     return args
 
-def get_DBID(args):
-    dbid = 0
-    if args.p: dbid +=2
-    if args.m: dbid +=1
-    return dbid
-
 def file_2_doc2fv(f, func_fe, avg_doc_len, term_count=None):
     doc2fv = {} # doc2feature_vector
+    df_list = []
 
     for term_id, (ctf, df, tf_dict, doc_len_list) in enumerate(lib.file2results(f)):
+        if not df: raise Exception(df)
+        df_list.append(df)
 
         for doc_id, tf in tf_dict.iteritems():
             
@@ -38,21 +36,25 @@ def file_2_doc2fv(f, func_fe, avg_doc_len, term_count=None):
             doc_len = doc_len_list[doc_id-1]
             if doc_len is None: raise Exception()
 
-            v = func_fe(tf, doc_len, avg_doc_len)
+            v = func_fe(tf, doc_len, avg_doc_len, df)
             doc_fv[term_id] = v
 
     if term_count is not None and term_id+1 != term_count:
         raise Exception("%d vs %d" % (term_id, term_count) )
 
-    return doc2fv
+    return (doc2fv,df_list)
 
-def q_terms2feature_vector(terms, func_fe):
+def q_terms2feature_vector(terms, func_fe, df_list):
     fv = {} #dict([(fe_name,{}) for fe_name in FEs])
     doc_len = len(terms)
     for term_id, term in enumerate(terms):
-        v = func_fe(1, len(terms), len(terms))
+        df = df_list[term_id]
+        if not df: raise Exception(df_list)
+
+        v = func_fe(1, len(terms), len(terms), df)
         #v = func_fe(1, len(terms), lib.avg_doc_len)
         fv[term_id] = v
+    if term_id+1 != len(df_list): raise Exception("%d vs %d" % (term_id,df_list) )
     return fv
 
 def get_ranked_list(query_fv, doc2fv, func_sim):
@@ -67,18 +69,19 @@ def get_ranked_list(query_fv, doc2fv, func_sim):
 
 def main():
     args = process_args()
-    dbid = get_DBID(args)
+    dbid = lib.get_DBID(args)
     avg_doc_len = lib.avg_doc_len_list[dbid]
 
-    q_terms = lib.q_str2q_terms(args.QUERY_TERMS)
+    q_terms = lib.q_str2q_terms(args.QUERY_TERMS, args)
+    print >>sys.stderr, "TERMS:", " ".join(q_terms)
     with open(args.DOCLIST) as f:
         docid_int2ext = list(lib.file2tokens(f,1,token_count_per_line=2))
 
     fe = h_fe[args.FE]
-    query_fv = q_terms2feature_vector(q_terms, fe[0])
+    doc2fv,df_list = file_2_doc2fv(sys.stdin, fe[0], avg_doc_len, term_count=len(q_terms))
+    query_fv = q_terms2feature_vector(q_terms, fe[0], df_list)
     #print >>sys.stderr, query_fv
     
-    doc2fv = file_2_doc2fv(sys.stdin, fe[0], avg_doc_len, term_count=len(q_terms))
     ranked_list = get_ranked_list(query_fv, doc2fv, fe[1])
 
     for i, r in enumerate(ranked_list[:min(len(ranked_list),1000)]):
