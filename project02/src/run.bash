@@ -44,7 +44,7 @@ for pm in pm; do # stop & stem
 
 
     # real retrieval
-    for fe in BM25_log; do #LM_JM; do #BM25_log; do #LM_JM; do # OKTF_IDF; do
+    for fe in OKTF OKTF_IDF LM_LAPLACE LM_JM BM25_log; do #LM_JM; do # OKTF_IDF; do
         echoerr "=== Using '$fe' ===="
         mkdir -p $OUT_PM_DIR/result/$fe
 
@@ -66,7 +66,10 @@ for pm in pm; do # stop & stem
         done
         cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
 
-        $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $OUT_PM_DIR/result/$fe.eval
-        cat $OUT_PM_DIR/result/$fe.eval
+        for qrel in adhoc.51-100.AP89 irclss10x1; do
+            ofile=$OUT_PM_DIR/result/$fe.qrel.$qrel.eval
+            $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $ofile
+            cat $ofile
+        done
     done
 done
