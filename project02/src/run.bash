@@ -62,13 +62,13 @@ for pm in pm; do # stop & stem
             # Local evaluation setup for debugging
             cat $DATA_DIR/qrel.irclass10X1 | perl -lane 'print join(" ",@F) if $F[0]=='$q_no';' \
                 > $TMP_DIR/Q$q_no.qrel.irclass10X1
-            $BIN_DIR/trec_eval -q $TMP_DIR/Q$q_no.qrel $OUT_PM_DIR/result/$fe/Q$q_no
+            $BIN_DIR/trec_eval  $TMP_DIR/Q$q_no.qrel $OUT_PM_DIR/result/$fe/Q$q_no
         done
         cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
 
         for qrel in adhoc.51-100.AP89 irclss10x1; do
             ofile=$OUT_PM_DIR/result/$fe.qrel.$qrel.eval
-            $BIN_DIR/trec_eval -q $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $ofile
+            $BIN_DIR/trec_eval  $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $ofile
             cat $ofile
         done
     done
