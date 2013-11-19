@@ -71,12 +71,11 @@ def q_terms2feature_vector(terms, func_fe, stat_list, fe_kwargs):
     kwargs['doc_len'] = len(terms)
     kwargs['doc_type'] = 'query'
 
-    fv = {} #dict([(fe_name,{}) for fe_name in FEs])
+    fv = {}
     doc_len = len(terms)
     for term_id, term in enumerate(terms):
         kwargs.update(stat_list[term_id])
 
-        #v = func_fe(1, len(terms), len(terms), df, uniq_term_count)
         v = func_fe(**kwargs)
         fv[term_id] = v
     if term_id+1 != len(stat_list): raise Exception("%d vs %d" % (term_id,stat_list) )
@@ -107,13 +106,11 @@ def main():
     fe = h_fe[args.FE]
     doc2fv, stat_list = file_2_doc2fv(sys.stdin, fe[0], fe_kwargs, q_term_count=len(q_terms))
     query_fv = q_terms2feature_vector(q_terms, fe[0], stat_list, fe_kwargs)
-    #print >>sys.stderr, query_fv
     
     ranked_list = get_ranked_list(query_fv, doc2fv, fe[1])
 
     for i, r in enumerate(ranked_list[:min(len(ranked_list),1000)]):
         doc_id, score = r
-        #doc_fullid = doc_id
         doc_fullid = docid_int2ext[doc_id-1]
         tokens = ( args.QUERY_NO, 'Q0', doc_fullid, (i+1), score, 'Exp')
         print " ".join([str(x) for x in tokens])

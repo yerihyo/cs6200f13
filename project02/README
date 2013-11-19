@@ -1,0 +1,17 @@
+# How to run
+
+The program should run smoothly by executing a bash file, "src/run.bash". Some installation of python library program might be necessary.
+
+The output files will be generated under "out/pm/result/" folder. The qrel evaluation result will be written in a file named "out/pm/result/<method_name>.<qrel_filename>". Table 1 shows the name of the methods used in the current implementation.
+
+==========================================================
+OKTF                 : Okapi TF
+OKTF_IDF             : Okapi TF with IDF
+LM_LAPLACE           : Language Model w/ Laplace Smoothing
+LM_JM                : Language Model w/ JM Smoothing
+BM25_log             : BM25
+TFIDF_vanilla        : Vanilla implementation of TFIDF
+TFIDF_wikipedia      : TFIDF as defined in Wikipedia
+==========================================================
+Table 1. IR systems implemented
+

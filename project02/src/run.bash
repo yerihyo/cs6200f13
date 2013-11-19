@@ -17,18 +17,13 @@ echoerr() { echo "$@" 1>&2; }
 
 mkdir -p $OUT_DIR $TMP_DIR
 
-#if [ ! -s $OUT_DIR/dump.result ]; then
-#    wget "$BASE_URL?d=1&g=p&v=the&v=of&v=and&v=to&v=in&v=is&v=a&v=no&v=it&v=on&v=test&v=0&v=1&v=n&v=m&v=est&v=ny&v=edt&v=g&v=am&v=pm" -O $OUT_DIR/dump.result
-#    tail -n +9 $OUT_DIR/dump.result | head -n -8 | $FILE_DIR/get_doc_len.py
-#fi
-
-for pm in pm; do # stop & stem
+for pm in pm; do # stop & stem options
     echoerr "=== Option '$pm' ===="
     options=`echo $pm | sed 's/^none//' | sed -e "s/\(.\)/ -\1/g"`
     OUT_PM_DIR=$OUT_DIR/$pm
     mkdir -p $OUT_PM_DIR/wget
 
-    # Query lemur
+    # Query lemur (locally store the result)
     cat $DATA_DIR/desc.51-100.short | grep -v '^$' | while read q_no_raw q_str; do
         q_no=`echo $q_no_raw | sed 's/\.$//'`
         if [ -s $OUT_PM_DIR/wget/Q$q_no.cln ]; then continue; fi
@@ -44,20 +39,20 @@ for pm in pm; do # stop & stem
 
 
     # real retrieval
-    for fe in OKTF OKTF_IDF LM_LAPLACE LM_JM BM25_log; do #LM_JM; do # OKTF_IDF; do
+    for fe in OKTF OKTF_IDF LM_LAPLACE LM_JM BM25_log TFIDF_vanilla TFIDF_wikipedia; do
         echoerr "=== Using '$fe' ===="
         mkdir -p $OUT_PM_DIR/result/$fe
 
         cat $DATA_DIR/desc.51-100.short | grep -v '^$' | while read q_no_raw q_str; do
             q_no=`echo $q_no_raw | sed 's/\.$//'`
-            if [ -s $OUT_PM_DIR/result/$fe/Q$q_no ]; then continue; fi
+            # if [ -s $OUT_PM_DIR/result/$fe/Q$q_no ]; then continue; fi # for fast debugging
 
             echoerr "=== Working on 'Q$q_no' ===="
             cat $OUT_PM_DIR/wget/Q$q_no.cln \
                 | $FILE_DIR/parse_wget.py $DATA_DIR/doclist.txt $fe $q_no $options "$q_str" \
                 > $OUT_PM_DIR/result/$fe/Q$q_no
 
-            continue
+            continue # skip debugging
 
             # Local evaluation setup for debugging
             cat $DATA_DIR/qrel.irclass10X1 | perl -lane 'print join(" ",@F) if $F[0]=='$q_no';' \
@@ -66,9 +61,9 @@ for pm in pm; do # stop & stem
         done
         cat $OUT_PM_DIR/result/$fe/Q* > $OUT_PM_DIR/result/$fe.all
 
-        for qrel in adhoc.51-100.AP89 irclss10x1; do
-            ofile=$OUT_PM_DIR/result/$fe.qrel.$qrel.eval
-            $BIN_DIR/trec_eval  $DATA_DIR/qrels.adhoc.51-100.AP89 $OUT_PM_DIR/result/$fe.all > $ofile
+        for qrel in qrels.adhoc.51-100.AP89 qrel.irclass10X1; do
+            ofile=$OUT_PM_DIR/result/$fe.$qrel.eval
+            $BIN_DIR/trec_eval  $DATA_DIR/$qrel $OUT_PM_DIR/result/$fe.all > $ofile
             cat $ofile
         done
     done

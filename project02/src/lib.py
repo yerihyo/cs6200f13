@@ -87,7 +87,7 @@ def get_LM_LAPLACE(**kwargs):
     return float(kwargs['tf']+1)/(kwargs['doc_len']+kwargs['NUM_UNIQUE_TERMS'])
 
 def get_LM_JM(**kwargs):
-    l = 0.2
+    l = 0.25
     return l*float(kwargs['tf'])/kwargs['doc_len'] + (1-l)*kwargs['ctf']/kwargs['NUM_TERMS']
 
 
