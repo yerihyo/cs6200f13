@@ -3,15 +3,25 @@
 set -e
 set -u
 
-
 FILE_DIR=$(dirname `readlink -f ${0}`)
 # FILE_DIR=`pwd`/src
 SRC_DIR=$FILE_DIR
 BASE_DIR=$(dirname $SRC_DIR)
 DATA_DIR=$BASE_DIR/data
+OUT_DIR=$BASE_DIR/out
+TMP_DIR=$BASE_DIR/tmp
 
-#find $DATA_DIR/ -name '*.html' 
-tail -n +3 $DATA_DIR/CACM-0870.html \
-    | head -n -3 \
-    | perl -MScalar::Util=looks_like_number -lane 'next if $#F==2 && scalar(grep{(looks_like_number $_)}@F)==$#F+1; print $_;' 
-    
+mkdir -p $OUT_DIR/wc $TMP_DIR
+
+# term frequency for each document
+if [ '' ]; then
+    rm -f $TMP_DIR/command.list
+    find $DATA_DIR/CACM/ -name '*.html' | while read f; do
+        b=`basename $f`
+        echo "$FILE_DIR/file2wc.bash $f > $OUT_DIR/wc/$b.wc" >> $TMP_DIR/command.list
+    done
+    cat $TMP_DIR/command.list | parallel
+fi
+
+find $OUT_DIR/wc/ -name "*.wc" \
+    | $FILE_DIR/tf_files2inverted_index.py
